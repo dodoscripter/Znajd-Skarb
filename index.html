@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Znajdź Skarb!</title>
+</head>
+
+<body>
+<h1 id="Nagłówek">Znajdź Skarb</h1>
+<img id="Mapa" width="400" height="400" src="https://nostarch.com/images/treasuremap.png">
+
+<p id="odległość"></p>
+
+<script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+
+<script>
+//Wylosuj liczbę
+var losowaLiczba = function (rozmiar) {
+return Math.floor(Math.random() * rozmiar);
+};
+
+//Obliczanie odległości między kliknięciem a celem
+var obliczOdległość = function (zdarzenie, cel) {
+var różnicaX = zdarzenie.offsetX - cel.x;
+var różnicaY = zdarzenie.offsetY - cel.y;
+return Math.sqrt((różnicaX * różnicaX) + (różnicaY * różnicaY));
+};
+
+//Łańcuch reprezentujący odległość
+var skonstruujPodpowiedź = function (odległość) {
+if (odległość < 10) {
+return "PARZY!!!";
+} else if (odległość < 20) {
+return "Gorąco!";
+} else if (odległość < 40) {
+return "Ciepło";
+} else if (odległość < 80) {
+return "Letnio";
+} else if (odległość < 160) {
+return "Zimno";
+} else if (odległość < 320) {
+return "Mróz!";
+} else {
+return "SYBERIA!!!";
+ } 
+};
+
+//Ustawienia zmiennych
+var szerokość = 400;
+var wysokość = 400;
+var kliknięcia = 0;
+
+//Miejsce ukrycia skarbu
+var cel = {
+x: losowaLiczba (szerokość),
+y: losowaLiczba (wysokość)
+};
+
+//skojarzenie kliknięcia na elemencie img (niewiem jak to skomentować :D)
+$("#Mapa").click(function (zdarzenie) {
+kliknięcia++;
+
+//Obliczanie odległości między kliknięciem a celem
+var odległość = obliczOdległość(zdarzenie, cel);
+
+//Na podstawie odległości wybieranie podpowiedzi
+var podpowiedź = skonstruujPodpowiedź(odległość);
+
+//Aktualizacja elementu #odległość nowym tekstem podpowiedzi
+$("#odległość").text(podpowiedź);
+
+//Jeśli kliknięcie było blisko skarbu, poinformuj o wygranej
+if (odległość < 8) {
+alert("Skarb został znaleziony po " + kliknięcia + "Kliknięciach!");
+}
+});
+</script>
+</body>
+</html>
